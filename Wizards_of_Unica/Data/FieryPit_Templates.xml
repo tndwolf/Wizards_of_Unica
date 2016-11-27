@@ -1,0 +1,299 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<templates name="Fire Pit">
+	<template id="e_bronze_thug1">
+		<TurnActor Faction="ENEMY" Health="5" Speed="20">
+			<skill ref="sk_rush" />
+			<OnRound>Mechanics.RunDefaultAI(Actor);</OnRound>
+		</TurnActor>
+		<GridObject />
+		<object2d parent="1001" spriteSheet="00_fiery_pit.png" idleAnimation="IDLE" onCreate="IDLE" origin="16 24" shadow="12">
+			<animation name="ATTACK" blocking="true">
+				<frame x="64" y="96" width="32" height="32" duration="200" sfx="BronzeAttk01.wav" />
+				<frame x="96" y="96" width="32" height="32" duration="200" />
+				<frame x="64" y="96" width="32" height="32" duration="200" />
+			</animation>
+			<animation name="MOVE" loop="true" blocking="true">
+				<frame x="0" y="96" width="32" height="32" duration="200" sfx="ThugWalk01.wav" />
+				<frame x="32" y="96" width="32" height="32" duration="200" />
+				<frame x="0" y="96" width="32" height="32" duration="200" />
+				<frame x="32" y="96" width="32" height="32" duration="200" />
+			</animation>
+			<animation name="RUSH" blocking="true">
+				<frame x="64" y="96" width="32" height="32" duration="200" sfx="BronzeRush.wav" />
+				<frame x="96" y="96" width="32" height="32" duration="600" />
+			</animation>
+			<animation name="IDLE" loop="true">
+				<frame x="0" y="96" width="32" height="32" duration="200" />
+			</animation>
+		</object2d>
+	</template>
+	<template id="bp_fire_carpet1">
+		<GridObject IsDressing="true">
+		</GridObject>
+		<object2d parent="1001" spriteSheet="00_fiery_pit.png" idleAnimation="IDLE" origin="64 32" z="-10">
+			<animation name="IDLE">
+				<frame x="480" y="288" width="128" height="64" duration="100000" />
+			</animation>
+		</object2d>
+	</template>
+	<template id="bp_fire_carpet2">
+		<GridObject IsDressing="true">
+		</GridObject>
+		<object2d parent="1001" spriteSheet="00_fiery_pit.png" idleAnimation="IDLE" origin="128 64" z="-10">
+			<animation name="IDLE">
+				<frame x="480" y="160" width="256" height="128" duration="100000"/>
+			</animation>
+		</object2d>
+	</template>
+	<template id="bp_fire_column1">
+		<GridObject></GridObject>
+		<object2d parent="1001" spriteSheet="00_fiery_pit.png" idleAnimation="IDLE" origin="53 96" shadow="12">
+			<animation name="IDLE">
+				<frame x="635" y="313" width="84" height="104" duration="100" />
+			</animation>
+		</object2d>
+	</template>
+	<template id="bp_fire_column2">
+		<GridObject></GridObject>
+		<object2d parent="1001" spriteSheet="00_fiery_pit.png" idleAnimation="IDLE" origin="16 56" shadow="12">
+			<animation name="IDLE">
+				<frame x="576" y="352" width="32" height="64" duration="100" />
+			</animation>
+		</object2d>
+	</template>
+	<template id="bp_fire_entrance">
+		<GridObject>
+		</GridObject>
+		<object2d parent="1001" spriteSheet="00_fiery_pit.png" idleAnimation="IDLE" origin="112 108">
+			<animation name="IDLE">
+				<frame x="256" y="0" width="224" height="128" duration="10000" />
+			</animation>
+		</object2d>
+	</template>
+	<template id="bp_firefly">
+		<TurnActor Faction="ENEMY" Health="1" Speed="10">
+			<OnRound>Mechanics.RunDefaultAI(Actor);</OnRound>
+		</TurnActor>
+		<GridObject />
+		<object2d parent="1001" spriteSheet="00_fiery_pit.png" idleAnimation="IDLE" origin="16 24" shadow="6">
+			<animation name="ATTACK" blocking="true">
+				<frame x="0" y="0" width="32" height="32" duration="5" />
+				<frame x="64" y="0" width="32" height="32" duration="350" sfx="FireFlyAttk01.wav" />
+				<frame x="0" y="0" width="32" height="32" duration="5" />
+			</animation>
+			<animation name="MOVE" loop="true" blocking="true">
+				<frame x="0" y="0" width="32" height="32" duration="0" />
+				<frame x="32" y="0" width="32" height="32" duration="100" />
+				<frame x="0" y="0" width="32" height="32" duration="100" />
+				<frame x="32" y="0" width="32" height="32" duration="100" />
+				<frame x="0" y="0" width="32" height="32" duration="100" />
+			</animation>
+			<animation name="IDLE" loop="true" >
+				<frame x="0" y="0" width="32" height="32" duration="0" />
+				<frame x="0" y="0" width="32" height="32" duration="100" />
+				<frame x="32" y="0" width="32" height="32" duration="100" />
+			</animation>
+		</object2d>
+	</template>
+	<template id="bp_fire_garg1">
+		<TurnActor Faction="ENEMY" Health="50" Speed="10">
+			<OnRound>
+				var spawnAt = function(x, y) {
+					var all = Mechanics.GetAllAt(x, y);
+					var found = false;
+					for(var i in all) {
+						//Logger.Debug("bp_fire_garg1.OnRound", "Testing " + all[i] + " res " + Mechanics.GetVariable(all[i], "isLava"));
+						if (Mechanics.GetVariable(all[i], "isLava") == 1) {
+							found = true;
+							Mechanics.SetIdleAnimation(all[i], "IDLE");
+							Mechanics.SetAnimation(all[i], "CREATE");
+							Mechanics.SetVariable(all[i], "ttl", 3);
+						}
+					}
+					if (found == false &amp;&amp; Mechanics.IsWalkable(x, y)) {
+						var created = Mechanics.Create("e_dynamic_lava", x, y);
+						Mechanics.SetAnimation(created, "CREATE");
+						Mechanics.SetVariable(created, "ttl", 3);
+						Mechanics.SetVariable(created, "isLava", 1);
+						found = true;
+					}
+					if (found == true) { return 1; }
+					else { return 0; }
+				}
+				
+				//Logger.Debug("bp_fire_garg1.OnRound", "Running Actor " + Actor);
+				var count = Mechanics.GetVariable(Actor, "count");
+				//Logger.Debug("bp_fire_garg1.OnRound", "Round Count " + count);
+				count++;
+				if(count == 5) {
+					//Logger.Debug("bp_fire_garg1.OnRound", "Spawning Lava");
+					Mechanics.SetIdleAnimation(Actor, "ACTIVE");
+					Mechanics.SetAnimation(Actor, "OPEN");
+					var pPosition = Mechanics.GetPosition(Actor);
+					spawnAt(pPosition[0], pPosition[1] + 1);
+				}
+				else if (count == 6) {
+					var pPosition = Mechanics.GetPosition(Actor);
+					if(Mechanics.Roll(1, 100, 0) &gt; 50) {
+						Mechanics.SetVariable(Actor, "createdSouth", spawnAt(pPosition[0], pPosition[1] + 2));
+					}
+					if(Mechanics.Roll(1, 100, 0) &gt; 50) {
+						Mechanics.SetVariable(Actor, "createdWest", spawnAt(pPosition[0] + 1, pPosition[1] + 1));
+					}
+					if(Mechanics.Roll(1, 100, 0) &gt; 50) {
+						Mechanics.SetVariable(Actor, "createdEast", spawnAt(pPosition[0] - 1, pPosition[1] + 1));
+					}
+				}
+				else if (count == 7) {
+					var pPosition = Mechanics.GetPosition(Actor);
+					if(Mechanics.GetVariable(Actor, "createdSouth") == 1) {
+						if(Mechanics.Roll(1, 100, 0) &gt; 50) spawnAt(pPosition[0], pPosition[1] + 3);
+						if(Mechanics.Roll(1, 100, 0) &gt; 50) spawnAt(pPosition[0] + 1, pPosition[1] + 2);
+						if(Mechanics.Roll(1, 100, 0) &gt; 50) spawnAt(pPosition[0] - 1, pPosition[1] + 2);
+					}
+					if(Mechanics.GetVariable(Actor, "createdWest") == 1) {
+						if(Mechanics.Roll(1, 100, 0) &gt; 50) spawnAt(pPosition[0] + 1, pPosition[1]);
+						if(Mechanics.Roll(1, 100, 0) &gt; 50) spawnAt(pPosition[0] + 2, pPosition[1] + 1);
+						if(Mechanics.Roll(1, 100, 0) &gt; 50) spawnAt(pPosition[0] + 1, pPosition[1] + 2);
+					}
+					if(Mechanics.GetVariable(Actor, "createdEast") == 1) {
+						if(Mechanics.Roll(1, 100, 0) &gt; 50) spawnAt(pPosition[0] - 1, pPosition[1]);
+						if(Mechanics.Roll(1, 100, 0) &gt; 50) spawnAt(pPosition[0] - 2, pPosition[1] + 1);
+						if(Mechanics.Roll(1, 100, 0) &gt; 50) spawnAt(pPosition[0] - 1, pPosition[1] + 2);
+					}
+				
+					//Logger.Debug("bp_fire_garg1.OnRound", "Reset counter of " + Actor + " to 0");
+					Mechanics.SetIdleAnimation(Actor, "IDLE");
+					Mechanics.SetAnimation(Actor, "CLOSE");
+					count = 0;
+					Mechanics.SetVariable(Actor, "createdEast", 0);
+					Mechanics.SetVariable(Actor, "createdWest", 0);
+					Mechanics.SetVariable(Actor, "createdSouth", 0);
+				}
+				//Logger.Debug("bp_fire_garg1.OnRound", "Updating Count " + count);
+				Mechanics.SetVariable(Actor, "count", count);
+			</OnRound>
+		</TurnActor>
+		<GridObject>
+		</GridObject>
+		<object2d parent="1001" spriteSheet="00_fiery_pit.png" idleAnimation="IDLE" origin="16 15">
+			<animation name="ACTIVE" blocking="false">
+				<frame x="320" y="256" width="32" height="37" duration="150" />
+				<frame x="352" y="256" width="32" height="37" duration="150" />
+				<frame x="288" y="256" width="32" height="37" duration="150" />
+			</animation>
+			<animation name="OPEN" blocking="false">
+				<frame x="288" y="192" width="32" height="37" duration="150" />
+				<frame x="320" y="192" width="32" height="37" duration="150" />
+				<frame x="352" y="192" width="32" height="37" duration="150" />
+			</animation>
+			<animation name="CLOSE" blocking="false">
+				<frame x="288" y="320" width="32" height="37" duration="150" />
+				<frame x="320" y="320" width="32" height="37" duration="150" />
+			</animation>
+			<animation name="IDLE">
+				<frame x="320" y="160" width="32" height="32" duration="150" />
+				<frame x="352" y="160" width="32" height="32" duration="150" />
+				<frame x="288" y="160" width="32" height="32" duration="150" />
+			</animation>
+		</object2d>
+		<light2d parent="1005" color="255 102 0 127" radius="256" position="16 16" />
+	</template>
+	<template id="bp_fire_lantern">
+		<GridObject>
+		</GridObject>
+		<object2d parent="1001" spriteSheet="00_fiery_pit.png" idleAnimation="IDLE" origin="16 24" shadow="16">
+			<animation name="IDLE">
+				<frame x="416" y="160" width="32" height="32" duration="100" />
+				<frame x="448" y="160" width="32" height="32" duration="100" />
+				<frame x="384" y="160" width="32" height="32" duration="100" />
+			</animation>
+		</object2d>
+		<light2d parent="1005" color="255 102 0 127" radius="256" position="16 16" />
+	</template>
+	<template id="bp_fire_light">
+		<GridObject IsDressing="true"></GridObject>
+		<object2d parent="1001" spriteSheet="00_fiery_pit.png" idleAnimation="IDLE" origin="16 15">
+			<animation name="IDLE">
+				<frame x="416" y="192" width="1" height="1" duration="100000" />
+			</animation>
+		</object2d>
+		<light2d parent="1005" color="255 102 0 255" radius="196" position="16 16" />
+	</template>
+	<template id="bp_fire_stairs">
+		<GridObject IsDressing="true" />
+		<object2d parent="1001" spriteSheet="00_fiery_pit.png" idleAnimation="IDLE" origin="48 16" z="-10">
+			<animation name="IDLE">
+				<frame x="768" y="288" width="96" height="32" duration="100000" />
+			</animation>
+		</object2d>
+	</template>
+	<template id="bp_fire_torch">
+		<GridObject>
+		</GridObject>
+		<object2d parent="1001" spriteSheet="00_fiery_pit.png" idleAnimation="IDLE" origin="16 15">
+			<animation name="IDLE">
+				<frame x="416" y="192" width="32" height="32" duration="100" />
+				<frame x="448" y="192" width="32" height="32" duration="100" />
+				<frame x="384" y="192" width="32" height="32" duration="100" />
+			</animation>
+		</object2d>
+		<light2d parent="1005" color="255 102 0 127" radius="256" position="16 16" />
+	</template>
+	<template id="e_thug">
+		<TurnActor Faction="ENEMY" Health="3" Speed="10">
+			<skill ref="sk_rush" />
+			<OnRound>Mechanics.RunDefaultAI(Actor);</OnRound>
+		</TurnActor>
+		<GridObject />
+		<object2d parent="1001" spriteSheet="00_fiery_pit.png" idleAnimation="IDLE" onCreate="IDLE" origin="16 24" shadow="10">
+			<animation name="ATTACK" blocking="true">
+					<frame x="64" y="60" width="32" height="36" origin="16 28" duration="200" sfx="ThugAttk01.wav"/>
+					<frame x="96" y="64" width="38" height="32" duration="200"/>
+				</animation>
+				<animation name="MOVE" loop="true" blocking="true">
+					<frame x="0" y="64" width="32" height="32" duration="50" />
+					<frame x="32" y="63" width="32" height="33" origin="16 25" duration="150"/>
+					<frame x="0" y="64" width="32" height="32" duration="100"/>
+					<frame x="32" y="63" width="32" height="32" origin="16 25" duration="150"/>
+					<frame x="0" y="64" width="32" height="33" duration="50"/>
+				</animation>
+				<animation name="IDLE" loop="true">
+					<frame x="0" y="64" width="32" height="32" duration="200"/>
+				</animation>
+		</object2d>
+	</template>
+	<template id="e_salamander">
+		<TurnActor Faction="ENEMY" Health="8" Speed="5">
+			<!--skill ref="sk_fire_breath"/-->
+			<OnRound>Mechanics.RunDefaultAI(Actor);</OnRound>
+		</TurnActor>
+		<GridObject />
+		<object2d parent="1001" spriteSheet="00_fiery_pit.png" idleAnimation="IDLE" onCreate="IDLE" origin="17 24" shadow="14">
+			<animation name="ATTACK" blocking="true">
+					<frame x="96" y="159" width="32" height="33" origin="16 25" duration="200" sfx="SalaBite01.wav"/>
+					<frame x="128" y="160" width="49" height="32" duration="250"/>
+					<frame x="31" y="160" width="34" height="32" duration="50"/>
+				</animation>
+				<animation name="CAST1" blocking="true">
+					<frame x="96" y="159" width="32" height="33" origin="16 25" duration="500"/>
+					<frame x="31" y="192" width="50" height="32" duration="100" sfx="SalaFire01.wav"/>
+					<frame x="31" y="224" width="68" height="38" duration="100"/>
+					<frame x="31" y="288" width="68" height="38" duration="100"/>
+					<frame x="31" y="224" width="68" height="38" duration="100"/>
+					<frame x="31" y="288" width="68" height="38" duration="100"/>
+					<frame x="31" y="352" width="68" height="38" duration="100"/>
+				</animation>
+				<animation name="MOVE" loop="true" blocking="true">
+					<frame x="31" y="160" width="34" height="32" duration="10"/>
+					<frame x="96" y="159" width="32" height="33" origin="16 25" duration="150" sfx="SalaWalk01.wav"/>
+					<frame x="31" y="160" width="34" height="32" duration="150"/>
+					<frame x="96" y="159" width="32" height="33" origin="16 25" duration="150"/>
+					<frame x="31" y="160" width="34" height="32" duration="10"/>
+				</animation>
+				<animation name="IDLE" loop="true">
+					<frame x="31" y="160" width="34" height="32" duration="100"/>
+				</animation>
+		</object2d>
+	</template>
+</templates>

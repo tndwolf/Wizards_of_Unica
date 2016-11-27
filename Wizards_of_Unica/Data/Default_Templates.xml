@@ -1,0 +1,338 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+	<template id="portrait_bel">
+		<object2d spriteSheet="00_base_pc_fx.png" idleAnimation="IDLE">
+			<animation name="IDLE">
+				<frame x="704" y="32" width="32" height="32" duration="1000" />
+			</animation>
+		</object2d>
+	</template>
+	<template id="portrait_yuki">
+		<object2d spriteSheet="00_base_pc_fx.png" idleAnimation="IDLE">
+			<animation name="IDLE">
+				<frame x="608" y="0" width="32" height="32" duration="1000" />
+			</animation>
+		</object2d>
+	</template>
+	<template id="portrait_truce">
+		<object2d spriteSheet="00_base_pc_fx.png" idleAnimation="IDLE">
+			<animation name="IDLE">
+				<frame x="672" y="0" width="32" height="32" duration="1000" />
+			</animation>
+		</object2d>
+	</template>
+	<template id="portrait_exekiel">
+		<object2d spriteSheet="00_base_pc_fx.png" idleAnimation="IDLE">
+			<animation name="IDLE" loop="true" blocking="false">
+				<frame x="64" y="0" width="32" height="32" duration="1300" />
+				<frame x="0" y="0" width="32" height="32" duration="2300" />
+			</animation>
+			<animation name="MOVE" blocking="false">
+				<frame x="32" y="0" width="32" height="32" duration="150" />
+				<frame x="0" y="0" width="32" height="32" duration="150" />
+				<frame x="32" y="0" width="32" height="32" duration="150" />
+			</animation>
+			<animation name="TALK" loop="true" blocking="false">
+				<frame x="0" y="0" width="32" height="32" duration="200" />
+				<frame x="128" y="0" width="32" height="32" duration="200" />
+			</animation>
+		</object2d>
+	</template>
+	<template id="bp_exekiel">
+		<TurnActor Faction="PLAYER" Health="10" Speed="10">
+			<skill ref="sk_attack" />
+			<skill ref="sk_truce" />
+			<skill ref="sk_ice" />
+			<skill ref="sk_icycle" />
+			<skill ref="sk_summon" />
+			<skill ref="sk_summon_ice" />
+		</TurnActor>
+		<GridObject moveSpeed="" />
+		<object2d parent="1001" spriteSheet="00_base_pc_fx.png" idleAnimation="IDLE" onCreate="IDLE" origin="16 24" shadow="10">
+			<animation name="CAST" blocking="true">
+				<frame x="32" y="160" width="32" height="32" duration="100"/>
+				<frame x="64" y="160" width="32" height="32" duration="100"/>
+				<frame x="32" y="160" width="32" height="32" duration="100"/>
+				<frame x="64" y="160" width="32" height="32" duration="100"/>
+				<frame x="32" y="160" width="32" height="32" duration="100"/>
+				<frame x="64" y="160" width="32" height="32" duration="100"/>
+				<frame x="0" y="96" width="32" height="32" duration="10"/>
+			</animation>
+			<animation name="DEATH" blocking="true">
+				<frame x="0" y="96" width="32" height="32" duration="100"/>
+				<frame x="224" y="96" width="32" height="32" duration="1000"/>
+				<frame x="192" y="160" width="64" height="32" duration="1000000"/>
+			</animation>
+			<animation name="IDLE">
+				<frame x="0" y="96" width="32" height="32" duration="1000" />
+			</animation>
+			<animation name="MOVE" loop="true" blocking="true">
+				<frame x="0" y="96" width="32" height="32" duration="50" />
+				<frame x="32" y="96" width="32" height="32" duration="150" />
+				<frame x="0" y="96" width="32" height="32" duration="100" />
+				<frame x="32" y="96" width="32" height="32" duration="150" />
+				<frame x="0" y="96" width="32" height="32" duration="50" />
+			</animation>
+			<animation name="ATTACK" blocking="true">
+				<frame x="0" y="96" width="32" height="32" duration="100" />
+				<frame x="64" y="86" width="32" height="42" origin="16 34" duration="150" />
+				<frame x="96" y="96" width="40" height="32" origin="20 24" duration="150" sfx="Bacco01.wav" />
+				<frame x="0" y="96" width="32" height="32" duration="100" />
+			</animation>
+		</object2d>
+	</template>
+	<template id="e_dynamic_lava">
+		<TurnActor Faction="ENEMY" Health="50" Speed="10">
+			<OnRound>
+				var ttl = Mechanics.GetVariable(Actor, "ttl");
+				ttl--;
+				if(ttl == 0) {
+					Mechanics.SetIdleAnimation(Actor, "BASALT");
+					Mechanics.SetAnimation(Actor, "COOLING");
+				}
+				Mechanics.SetVariable(Actor, "ttl", ttl);
+			</OnRound>
+		</TurnActor>
+		<GridObject IsTrigger="true">
+			<OnEnter>
+				//Logger.Debug("e_dynamic_lava.OnEnter", "Current TTL: " + Mechanics.GetVariable(Actor, "ttl"));
+				if (Mechanics.GetVariable(Actor, "ttl") > 0) {
+					//Logger.Debug("e_dynamic_lava.OnEnter", "Damaging: " + Target);
+					//Mechanics.Damage(Actor, Target, 1, Mechanics.DAMAGE_TYPE_FIRE);
+					Audio.Play("Lava01.wav");
+				}
+			</OnEnter>
+		</GridObject>
+		<object2d parent="1001" spriteSheet="00_base_pc_fx.png" onCreate="CREATE" origin="16 16" z="-1">
+			<animation name="IDLE" loop="true" blocking="false">
+				<frame x="160" y="256" width="32" height="32" duration="250" />
+				<frame x="224" y="256" width="32" height="32" duration="250" />
+				<frame x="288" y="256" width="32" height="32" duration="250" />
+				<frame x="224" y="256" width="32" height="32" duration="250" />
+			</animation>
+			<animation name="BASALT" blocking="false">
+				<frame x="288" y="320" width="32" height="32" duration="250" />
+			</animation>
+			<animation name="COOLING" blocking="false">
+				<frame x="160" y="320" width="32" height="32" duration="150" />
+				<frame x="224" y="320" width="32" height="32" duration="150" />
+				<frame x="288" y="320" width="32" height="32" duration="150" />
+			</animation>
+			<animation name="CREATE" blocking="false">
+				<frame x="32" y="256" width="32" height="32" duration="150" />
+				<frame x="64" y="256" width="32" height="32" duration="150" />
+				<frame x="96" y="256" width="32" height="32" duration="150" />
+			</animation>
+		</object2d>
+		<light2d parent="1005" color="255 102 0 127" radius="64" position="16 16" />
+	</template>
+	<template id="bp_ice_sheet">
+		<GridObject IsTrigger="true">
+			<OnEnter>
+				Logger.Debug("bp_ice_sheet.OnEnter", "Start");
+				Mechanics.Wait(250);
+				var movement = Mechanics.GetDirection(Target);
+				Mechanics.Push(Target, movement[0], movement[1]);
+				Logger.Debug("bp_ice_sheet.OnEnter", "Finished");
+			</OnEnter>
+		</GridObject>
+		<object2d parent="1001" spriteSheet="00_base_pc_fx.png" idleAnimation="IDLE" onCreate="CREATE" origin="17 17" z="-10">
+			<animation name="CREATE" blocking="false">
+				<frame x="352" y="255" width="32" height="34" duration="0" />
+				<frame x="352" y="255" width="32" height="34" duration="150" />
+				<frame x="384" y="255" width="32" height="34" duration="150" />
+				<frame x="416" y="255" width="32" height="34" duration="150" />
+			</animation>
+			<animation name="DESTROY" blocking="false">
+				<frame x="416" y="255" width="32" height="34" duration="0" />
+				<frame x="416" y="255" width="32" height="34" duration="150" />
+				<frame x="384" y="255" width="32" height="34" duration="150" />
+				<frame x="352" y="255" width="32" height="34" duration="150" />
+			</animation>
+			<animation name="IDLE" loop="true" blocking="false">
+				<frame x="480" y="255" width="34" height="35" duration="5000" />
+				<frame x="544" y="255" width="34" height="35" duration="100" />
+				<frame x="608" y="255" width="34" height="35" duration="100" />
+			</animation>
+		</object2d>
+	</template>
+	<template id="e_lava">
+		<GridObject IsTrigger="true">
+			<OnEnter>Mechanics.Damage(Actor, Target, 1, Mechanics.DAMAGE_TYPE_FIRE);Audio.Play("Lava01.wav");</OnEnter>
+		</GridObject>
+		<object2d parent="1001" spriteSheet="00_base_pc_fx.png" onCreate="CREATE" origin="16 16" z="-1">
+			<animation name="IDLE" loop="true" blocking="false">
+				<frame x="160" y="256" width="32" height="32" duration="250" />
+				<frame x="224" y="256" width="32" height="32" duration="250" />
+				<frame x="288" y="256" width="32" height="32" duration="250" />
+				<frame x="224" y="256" width="32" height="32" duration="250" />
+			</animation>
+			<animation name="BASALT" blocking="false">
+				<frame x="288" y="320" width="32" height="32" duration="250" />
+			</animation>
+			<animation name="COOLING" blocking="false">
+				<frame x="160" y="320" width="32" height="32" duration="250" />
+				<frame x="224" y="320" width="32" height="32" duration="250" />
+				<frame x="288" y="320" width="32" height="32" duration="250" />
+			</animation>
+			<animation name="CREATE" blocking="false">
+				<frame x="32" y="256" width="32" height="32" duration="150" />
+				<frame x="64" y="256" width="32" height="32" duration="150" />
+				<frame x="96" y="256" width="32" height="32" duration="150" />
+			</animation>
+		</object2d>
+	</template>
+	<template id="e_rake">
+		<TurnActor Speed="10" Faction="PLAYER" />
+		<GridObject />
+		<object2d parent="1001" spriteSheet="00_base_pc_fx.png" origin="16 16">
+			<animation name="IDLE">
+				<frame x="256" y="96" width="32" height="32" duration="1000" />
+			</animation>
+			<animation name="MOVE" loop="true" blocking="true">
+				<frame x="288" y="96" width="32" height="32" duration="150" />
+				<frame x="256" y="96" width="32" height="32" duration="150" />
+			</animation>
+			<animation name="ATTACK" blocking="true">
+				<frame x="288" y="96" width="32" height="32" duration="" />
+				<frame x="256" y="96" width="32" height="32" duration="" />
+			</animation>
+		</object2d>
+	</template>
+	<template id="e_summon_ice">
+		<TurnActor Faction="PLAYER" Health="5" Speed="10">
+			<OnRound>Mechanics.RunDefaultAI(Actor);</OnRound>
+		</TurnActor>
+		<GridObject moveSpeed="" />
+		<object2d parent="1001" spriteSheet="00_base_pc_fx.png" idleAnimation="IDLE" onCreate="IDLE" origin="16 24" shadow="10">
+			<animation name="ATTACK" blocking="true">
+					<frame x="608" y="160" width="32" height="32" duration="200" sfx="BronzeAttk01.wav"/>
+					<frame x="640" y="155" width="32" height="37" origin="16 29" duration="200"/>
+					<frame x="672" y="160" width="32" height="32" duration="200"/>
+					<frame x="704" y="160" width="32" height="32" duration="200"/>
+				</animation>
+				<animation name="CAST" blocking="true">
+					<frame x="608" y="160" width="32" height="32" duration="200" sfx="SalaFire01.wav"/>
+					<frame x="640" y="155" width="32" height="37" origin="16 29" duration="200"/>
+					<frame x="736" y="160" width="44" height="32" duration="200"/>
+					<frame x="800" y="160" width="43" height="32" duration="200"/>
+				</animation>
+				<animation name="MOVE" loop="true" blocking="true">
+					<frame x="544" y="160" width="32" height="32" duration="120" sfx="ThugWalk01.wav"/>
+					<frame x="576" y="160" width="32" height="32" duration="120"/>
+					<frame x="544" y="160" width="32" height="32" duration="120"/>
+					<frame x="576" y="160" width="32" height="32" duration="120"/>
+				</animation>
+				<animation name="IDLE">
+					<frame x="544" y="160" width="32" height="32" duration="1000"/>
+				</animation>
+		</object2d>
+	</template>
+	<template id="e_summon_imp">
+		<TurnActor Faction="PLAYER" Health="5" Speed="10">
+			<OnRound>Mechanics.RunDefaultAI(Actor);</OnRound>
+		</TurnActor>
+		<GridObject moveSpeed="" />
+		<object2d parent="1001" spriteSheet="00_base_pc_fx.png" idleAnimation="IDLE" onCreate="IDLE" origin="16 24" shadow="10">
+			<animation name="ATTACK" blocking="true">
+					<frame x="640" y="96" width="36" height="32" duration="100" sfx="BronzeAttk01.wav"/>
+					<frame x="704" y="95" width="36" height="34" origin="16 26" duration="100"/>
+					<frame x="768" y="96" width="38" height="32" duration="100"/>
+					<frame x="640" y="96" width="36" height="32" duration="100"/>
+					<frame x="704" y="95" width="36" height="34" origin="16 26" duration="100"/>
+					<frame x="768" y="96" width="38" height="32" duration="100"/>
+				</animation>
+				<animation name="CAST" blocking="true">
+					<frame x="640" y="96" width="36" height="32" duration="0"/>
+					<frame x="640" y="96" width="36" height="32" duration="200"/>
+					<frame x="704" y="95" width="36" height="34" origin="16 26" duration="200"/>
+					<frame x="768" y="96" width="38" height="32" duration="200"/>
+					<frame x="832" y="96" width="36" height="32" duration="200" sfx="SalaFire01.wav"/>
+					<frame x="896" y="95" width="36" height="34" origin="16 26" duration="200"/>
+					<frame x="960" y="96" width="38" height="32" duration="200"/>
+				</animation>
+				<animation name="MOVE" loop="true" blocking="true">
+					<frame x="544" y="96" width="32" height="32" duration="150"/>
+					<frame x="576" y="95" width="32" height="34" origin="16 26" duration="150"/>
+					<frame x="608" y="96" width="32" height="32" duration="150"/>
+				</animation>
+				<animation name="IDLE">
+					<frame x="544" y="96" width="32" height="32" duration="150"/>
+					<frame x="576" y="95" width="32" height="34" origin="16 26" duration="150"/>
+					<frame x="608" y="96" width="32" height="32" duration="150"/>
+				</animation>
+		</object2d>
+	</template>
+	<template id="ps_death">
+		<particleSystem parent="1001" lightsLayer="1005" ttl="700">
+			<boxEmitter width="12" height="12" minAngle="0.0" maxAngle="6.28" minSpeed="0.5" maxSpeed="1.0" particleTtl="1000" position="-6 -16" spawnCount="64" spawnDeltaTime="50" startTime="0" ttl="55">
+				<color value="255 0 0 127"/>
+				<particleTemplate type="PIXEL"/>
+			</boxEmitter>
+			<infiniteAttractor acceleration="0 0.001" startTime="0" ttl="1000" />
+		</particleSystem>
+	</template>
+	<template id="ps_test">
+		<particleSystem parent="1001" lightsLayer="1005" ttl="5000">
+			<circularEmitter minRadius="24" maxRadius="42" minAngle="0.0" maxAngle="6.28" minSpeed="0" maxSpeed="1" particleTtl="5000" position="0 -8" spawnCount="3" spawnDeltaTime="100" startTime="0" ttl="1000">
+				<color value="255 255 255 127"/>
+				<color value="127 255 255 127"/>
+				<color value="127 127 255 127"/>
+				<particleTemplate type="PIXEL" lightColor="255 255 255 255" lightRadius="8"/>
+				<particleTemplate type="PIXEL" lightColor="255 255 255 255" lightRadius="8"/>
+				<particleTemplate type="PIXEL" lightColor="255 255 255 255" lightRadius="8"/>
+				<particleTemplate type="SPRITE" spriteSheet="00_base_pc_fx.png" idleAnimation="IDLE" lightColor="255 255 255 255" lightRadius="8">
+					<animation name="IDLE">
+							<frame x="576" y="4" width="3" height="3" duration="250"/>
+							<frame x="588" y="4" width="3" height="3" duration="250"/>
+					</animation>
+				</particleTemplate>
+			</circularEmitter>
+			<infiniteAttractor acceleration="0 0.001" startTime="0" ttl="1000" />
+		</particleSystem>
+	</template>
+	<template id="ps_guard">
+		<particleSystem parent="1001" ttl="-1">
+			<circularEmitter minRadius="24" maxRadius="42" particleTtl="800" position="0 -8" spawnCount="3" spawnDeltaTime="80" startTime="200" ttl="-1" >
+			</circularEmitter>
+			<color value="255,255,255,196"/>
+			<color value="0,255,255,196"/>
+			<color value="64,128,255,196"/>
+			<particleTemplate type="PIXEL"/>
+			<pointAttractor acceleration=".01" position="0 0" startTime="0" ttl="500" />
+			<!--pointAttractor acceleration="-.04" position="0 0" startTime="500" ttl="1000"/-->
+			<emitter minAngle="0.0" maxAngle="6.28" minSpeed="0" maxSpeed="0" particleTtl="1000" position="0 0" spawnCount="48" spawnDeltaTime="100" startTime="550" ttl="560" />
+			<pointAttractor acceleration="-.001" position="0 0" startTime="500" ttl="1000" />
+		</particleSystem>
+	</template>
+	<template id="ps_hurt">
+		<particleSystem parent="1001" ttl="3000">
+			<circularEmitter minRadius="16" maxRadius="24" particleTtl="300" position="0 -8" spawnCount="3" spawnDeltaTime="10" startTime="400" ttl="400" >
+				<color value="255,0,255,255"/>
+				<color value="255,0,0,255"/>
+				<color value="127,0,0,255"/>
+				<particleTemplate type="PIXEL"/>
+			</circularEmitter>
+			<pointAttractor acceleration=".01" position="0 -8" startTime="0" ttl="1000" />
+			<!--pointAttractor acceleration="-.04" position="0 0" startTime="500" ttl="1000"/-->
+			<emitter minAngle="0.0" maxAngle="6.28" minSpeed="0.01" maxSpeed="0.1" particleTtl="400" position="0 -8" spawnCount="3" spawnDeltaTime="10" startTime="1000" ttl="400">
+				<color value="255,0,255,255"/>
+				<color value="255,0,0,255"/>
+				<color value="127,0,0,255"/>
+				<particleTemplate type="PIXEL"/>
+			</emitter>
+			<pointAttractor acceleration="-.01" position="0 -8" startTime="1000" ttl="1000" />
+		</particleSystem>
+	</template>
+	<template id="ps_test2">
+		<particleSystem parent="1001" ttl="10000">
+			<emitter minAngle="0.0" maxAngle="6.28" minSpeed="0" maxSpeed="1" particleTtl="1000" position="0 0" spawnCount="3" spawnDeltaTime="100" startTime="0" ttl="6000" />
+			<infiniteAttractor acceleration="0 0.001" startTime="0" ttl="1000" />
+			<infiniteAttractor acceleration="0 -0.001" startTime="1000" ttl="1000" />
+			<infiniteAttractor acceleration="0 0.001" startTime="2000" ttl="1000" />
+			<infiniteAttractor acceleration="0 -0.001" startTime="3000" ttl="1000" />
+			<infiniteAttractor acceleration="0 0.001" startTime="4000" ttl="1000" />
+			<infiniteAttractor acceleration="0 -0.001" startTime="5000" ttl="1000" />
+		</particleSystem>
+	</template>
+</templates>

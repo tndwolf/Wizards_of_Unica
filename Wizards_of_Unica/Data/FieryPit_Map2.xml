@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<level id="fiery_pit" minArea="300" maxWidth="200" maxHeight="200" algorithm="BLOCK" start="b_start" end="b_end_gate">
+	<tileMasks defaultX="0" defaultY="0" defaultW="32" defaultH="32" parent="1001" texture="fiery_pit_walls.png">
+		<tile x="83 128 159" y="0" maxX="512" dx="16" dy="48" w="32" h="64" descr="wall front single - peak">
+			<condition dx="0" dy="0" value="#" />
+		</tile>
+	</tileMasks>
+	<tileMasks defaultX="0" defaultY="0" defaultW="32" defaultH="32" parent="1002" texture="fiery_pit_floor.png">
+		<tile x="0" y="0" maxX="1024" maxY="512" dx="16" dy="16" w="32" h="32" z="-100" type="GRID" descr="floor">
+			<condition dx="0" dy="0" value="#" />
+		</tile>
+		<tile x="0" y="0" maxX="1024" maxY="512" dx="16" dy="16" w="32" h="32" z="-100" type="GRID" descr="floor">
+			<condition dx="0" dy="0" value="." />
+		</tile>
+		<tile x="0" y="32" maxX="32" maxY="32" dx="16" dy="16" w="32" h="32" z="-100" descr="pit" texture="fiery_pit_walls.png">
+			<condition dx="0" dy="-1" value="." />
+			<condition dx="0" dy="0" value="_" />
+		</tile>
+		<tile x="0" y="32" maxX="32" maxY="32" dx="16" dy="16" w="32" h="32" z="-100" descr="pit" texture="fiery_pit_walls.png">
+			<condition dx="0" dy="-1" value="#" />
+			<condition dx="0" dy="0" value="_" />
+		</tile>
+		<tile x="0" y="0" maxX="32" maxY="32" dx="16" dy="16" w="32" h="32" z="-100" descr="pit" texture="fiery_pit_walls.png">
+			<condition dx="0" dy="0" value="_" />
+		</tile>
+	</tileMasks>
+	<!-- in general "occurs" attribute are the number of occurencies while
+	"probability" is a pb between 0.0 and 1.0 -->
+	<tiles default="_">
+		<tile blocksLos="false" description="floor" glyph="." walkable="true" />
+		<tile blocksLos="false" description="pit" glyph="O" walkable="true" />
+		<tile blocksLos="true" description="wall" glyph="#" walkable="false" />
+		<conditionalTile description="pillar or pit" glyph="?">
+			<condition occurs="1" ref="#" />
+			<condition occurs="1" ref="O" />
+		</conditionalTile>
+	</tiles>
+	<!-- It may be useful for exit element to indicate an "if closed" alternate tile -->
+	<!-- By default whitespace characters are ignored (that's why width/height is required) -->
+	<!-- Evaluate the use of empty characters, like 'X', to have non square rooms -->
+	<!-- Variations are 'F'lip (Y), 'M'irror (X), 'FM' both, 'CW' clockwise rotation, 'CCW' counte-cw -->
+	<block id="b_start" width="7" height="8" occurs="0">
+	    _______
+	    _______
+	    _#####_
+	    #######
+	    .......
+	    .......
+	    .......
+	    _....._
+	    <exit x="3" y="7" direction="S" />
+		<start x="3" y="4" />
+		<object ref="bp_fire_entrance" x="3" y="3" probability="1.0" />
+		<object ref="bp_fire_carpet1" x="3" y="5" probability="0.99" />
+	</block>
+	<block id="b_end_gate" width="7" height="8" occurs="0">
+	    _______
+	    _______
+	    _#####_
+	    #######
+	    .......
+	    .......
+	    .......
+	    _....._
+    	<exit x="3" y="7" direction="S" />
+		<end x="3" y="4" />
+		<trigger x="2" y="4" width="3" height="1">
+			if(Target == Player) {
+				Logger.Debug("FieryPit_Map2.onExit", "Starting");
+				Factory.LoadScene(Mechanics.World, "ICE_SCENE");
+				Logger.Debug("FieryPit_Map2.onExit", "Finished");
+			}
+		</trigger>
+		<object ref="bp_fire_entrance" x="3" y="3" probability="1.0" />
+		<object ref="bp_fire_carpet1" x="3" y="5" probability="0.5" />
+	</block>
+	<block id="b_room" width="5" height="5" occurs="1" variations="F,CW,CCW">
+	    _____
+	    _..._
+	    #...#
+	    #...#
+	    ##.##
+	    <exit x="2" y="4" direction="S" />
+		<object ref="bp_fire_torch" x="0" y="2" probability="0.5" variations="F,CW,CCW" />
+		<object ref="bp_fire_torch" x="4" y="2" probability="0.5" variations="F,CW,CCW" />
+	</block>
+	<block id="b_room_lantern1" width="5" height="5" occurs="1" variations="F,CW,CCW">
+	    _____
+	    _..._
+	    #...#
+	    #...#
+	    ##.##
+    	<exit x="2" y="4" direction="S" />
+		<object ref="bp_fire_lantern" x="2" y="2" probability="0.8" />
+		<object ref="bp_fire_torch" x="0" y="2" probability="0.5" variations="F,CW,CCW" /><object ref="bp_fire_torch" x="4" y="2" probability="0.5" variations="F,CW,CCW" /></block>
+	<block id="b_room2" width="5" height="5" occurs="1" variations="F,M,FM">
+    _____
+    _...#
+    _....
+    #...#
+    __.##
+    <exit x="2" y="4" direction="S" canBeClosed="true" /><exit x="4" y="2" direction="E" canBeClosed="true" /></block>
+	<block id="b_room3" width="5" height="5" occurs="1" variations="F,M,FM,CW,CCW">
+    _____
+    _....
+    #....
+    #....
+    ##.__
+    <exit x="2" y="4" direction="S" canBeClosed="true" /><exit x="4" y="2" direction="E" /><object ref="bp_fire_torch" x="0" y="2" probability="0.5" variations="F,M,FM" /></block>
+	<block id="b_room4" width="5" height="5" occurs="1" variations="F,M,FM,CW,CCW">
+    _....
+    _....
+    _....
+    _....
+    __.__
+    <exit x="2" y="4" direction="S" canBeClosed="true" /><exit x="4" y="2" direction="E" /><exit x="2" y="0" direction="N" /><object ref="bp_fire_lantern" x="3" y="1" probability="0.5" /></block>
+	<block id="b_column_room_vert" width="5" height="5" occurs="1">
+    _..._
+    _..._
+    _..._
+    _..._
+    _..._
+    <exit x="2" y="0" direction="N" /><exit x="2" y="4" direction="S" /><object ref="bp_fire_column1" x="1" y="2" probability="0.5" /><object
+			ref="bp_fire_column1" x="3" y="2" probability="0.5" /><object ref="bp_fire_lantern" x="2" y="2" probability="0.5" /></block>
+	<block id="b_column_room_hor" width="5" height="5" occurs="1">
+    __#__
+    .....
+    .....
+    .....
+    __#__
+    <exit x="0" y="2" direction="E" /><exit x="4" y="2" direction="W" /><object ref="bp_fire_garg1" x="2" y="0" probability="0.5" /><object
+			ref="bp_fire_torch" x="2" y="4" probability="0.5" /></block>
+	<block id="b_room_huge" width="9" height="5" occurs="1">
+    .........
+    .........
+    .........
+    .........
+    .........
+    <exit x="2" y="0" direction="N" /><exit x="6" y="0" direction="N" /><exit x="2" y="4" direction="S" /><exit x="6"
+			y="4" direction="S" /><object ref="bp_fire_carpet2" x="3" y="2" probability="1.0" /><!--object ref="bp_fire_column2" x="7" y="2" probability="1.0"/>
+		<object ref="bp_fire_column2" x="1" y="2" probability="1.0"/--><object ref="bp_fire_lava" x="3" y="2" probability="1.0" /><object ref="bp_fire_lava" x="4" y="2" probability="1.0" /><object ref="bp_fire_lava" x="3"
+			y="3" probability="1.0" /><object ref="bp_fire_lava" x="4" y="3" probability="1.0" /><object ref="bp_fire_column2" x="5" y="1" probability="0.7" /><object
+			ref="bp_fire_column2" x="2" y="1" probability="0.7" /><object ref="bp_fire_column2" x="5" y="4" probability="0.7" /><object ref="bp_fire_column2" x="2"
+			y="4" probability="0.7" /></block>
+	<block id="b_room_huge_columns" width="9" height="5" occurs="1">
+    .........
+    .........
+    .........
+    .........
+    .........
+    <exit x="2" y="0" direction="N" /><exit x="6" y="0" direction="N" /><exit x="2" y="4" direction="S" /><exit x="6"
+			y="4" direction="S" /><object ref="bp_fire_column1" x="1" y="2" probability="0.7" /><object ref="bp_fire_column1" x="3" y="2" probability="0.7" /><object
+			ref="bp_fire_column1" x="5" y="2" probability="0.7" /><object ref="bp_fire_column1" x="7" y="2" probability="0.7" /><object ref="bp_fire_lantern" x="2"
+			y="2" probability="0.2" /><object ref="bp_fire_lantern" x="4" y="2" probability="0.2" /><object ref="bp_fire_lantern" x="6" y="2" probability="0.2" /></block>
+	<block id="b_cross" width="3" height="3" occurs="1">
+    _._
+    ...
+    _._
+    <exit x="1" y="0" direction="N" canBeClosed="true" /><exit x="1" y="2" direction="S" canBeClosed="true" /><exit x="0" y="1"
+			direction="W" canBeClosed="true" /><exit x="2" y="1" direction="E" canBeClosed="true" /></block>
+	<block id="b_T" width="3" height="3" occurs="1" variations="F,CW,CCW">
+    ___
+    ...
+    #.#
+    <exit x="1" y="2" direction="S" canBeClosed="true" /><exit x="0" y="1" direction="W" canBeClosed="true" /><exit x="2" y="1"
+			direction="E" canBeClosed="true" /></block>
+	<block id="b_corridor" width="3" height="3" occurs="1" variations="CW">
+    ###
+    ...
+    ###
+    <exit x="0" y="1" direction="W" canBeClosed="true" /><exit x="2" y="1" direction="E" canBeClosed="true" /><object ref="bp_fire_garg1" x="1"
+			y="0" probability="0.2" /></block>
+	<block id="b_corridor_snake" width="3" height="3" occurs="1" variations="CW,CCW,F">
+    ...
+    .#.
+    ___
+    <exit x="0" y="1" direction="W" canBeClosed="true" /><exit x="2" y="1" direction="E" canBeClosed="true" /><object ref="bp_fire_torch" x="1"
+			y="1" probability="0.5" variations="F,CW,CCW" /></block>
+	<block id="b_corridor_pillar" width="3" height="3" occurs="1" variations="CW">
+    ...
+    .#.
+    ...
+    <exit x="0" y="1" direction="W" canBeClosed="true" /><exit x="2" y="1" direction="E" canBeClosed="true" /><object ref="bp_fire_garg1" x="1"
+			y="1" probability="0.5" variations="CW" /></block>
+	<block id="b_cross_pillar" width="3" height="3" occurs="1">
+    ...
+    .#.
+    ...
+    <exit x="0" y="1" direction="W" canBeClosed="true" /><exit x="2" y="1" direction="E" canBeClosed="true" /><exit x="1" y="0"
+			direction="N" canBeClosed="true" /><exit x="1" y="2" direction="S" canBeClosed="true" /><object ref="bp_fire_garg1" x="1" y="1" probability="0.5" /></block>
+	<block id="b_scorridor1" width="3" height="4" occurs="1" variations="CW">
+    __#
+    _..
+    ..#
+    #__
+    <exit x="0" y="2" direction="W" canBeClosed="true" /><exit x="2" y="1" direction="E" canBeClosed="true" /></block>
+	<block id="b_scorridor2" width="3" height="4" occurs="1" variations="CW">
+    #__
+    .._
+    _..
+    _##
+    <exit x="0" y="1" direction="W" canBeClosed="true" /><exit x="2" y="2" direction="E" canBeClosed="true" /></block>
+	<block id="b_L" width="3" height="3" occurs="1" variations="F,M,FM">
+    #.#
+    #..
+    ___
+    <exit x="1" y="0" direction="N" canBeClosed="true" /><exit x="2" y="1" direction="E" canBeClosed="true" /><object ref="bp_fire_torch" x="2"
+			y="0" probability="0.5" variations="F,M,FM" /></block>
+</level>

@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+	<scenes>
+		<scene id="START_SCENE">
+			<onLoad>
+				Mechanics.GenerateWorld("Data/FieryPit_Map.xml");
+				Logger.Debug("START_SCENE.onLoad", "Initializing Player");
+				Mechanics.InitializePlayer("bp_exekiel");
+				var pPosition = Mechanics.GetPosition(Player);
+				//Mechanics.Create("bp_ice_sheet", 2, 3);
+				//Mechanics.Create("e_bronze_thug1", pPosition[0] + 2, pPosition[1] + 0);
+				Mechanics.AddCamera(1000, Player);
+				Mechanics.LookAt(10, Player);
+				Mechanics.ShowGui();
+				Mechanics.Play("DoorClosing16bit.wav", -1);
+				Logger.Debug("START_SCENE.onLoad", "Finished");
+			</onLoad>
+			<entity id="1000" descr="container"><layer scale="2 2"/></entity>
+			<entity id="1003" descr="background"><layer blendMode="ALPHA" parent="1000"/></entity>
+			<entity id="1002" descr="floor"><layer blendMode="ALPHA" parent="1000"/></entity>
+			<entity id="1004" descr="grid"><layer blendMode="ADD" parent="1000"/></entity>
+			<entity id="1001" descr="gameobjects"><layer blendMode="ALPHA" parent="1000"/></entity>
+			<entity id="1005" descr="lights"><layer blendMode="MULTIPLY" clearColor="96 96 128 128" parent="1000"/></entity>
+			<entity id="10">
+				<LevelActor Speed="10" threatProgression="1 0 0 0 0 1 0 0 0 0 2 0 0 0 0 3 0 0 0 0 5 0 0 0 0" MaxThreat="20" AlwaysIncreaseThreat="true">
+					<EnemyBlueprints>
+						<EnemyBlueprint TemplateID="bp_firefly" type="MOB" Threat="1" />
+						<EnemyBlueprint TemplateID="e_bronze_thug1" type="STONE_WALL" Threat="3" />
+						<EnemyBlueprint TemplateID="e_salamander" type="LIGHTNING_BRUISER" Threat="8" />
+						<EnemyBlueprint TemplateID="e_thug" type="GLASS_CANNON" Threat="2" />
+					</EnemyBlueprints>
+					<MusicLoops file="wizardduel06FIRELEVEL_good02_2.ogg">
+						<MusicLoop name="intro" start="0" end="16540" MaxThreat="0" />
+						<MusicLoop name="combat1" start="16541" end="33090" MaxThreat="2" />
+						<MusicLoop name="combat2" start="33091" end="41360" MaxThreat="6" />
+						<MusicLoop name="combat3" start="41361" end="49640" MaxThreat="15" />
+					</MusicLoops>
+				</LevelActor>
+				<map width="8" height="8" default="#" parent="1004" position="-16 -16">
+				</map>
+				<tiles2d parent="1003" spriteSheet="FieryPit_Background.png" gridWidth="5" gridHeight="5" onCreate="IDLE">
+					<animation name="IDLE">
+						<frame x="10" y="0" width="1024" height="512" duration="160"/>
+						<frame x="8" y="0" width="1024" height="512" duration="160"/>
+						<frame x="5" y="0" width="1024" height="512" duration="160"/>
+						<frame x="0" y="0" width="1024" height="512" duration="160"/>
+						<frame x="-5" y="0" width="1024" height="512" duration="160"/>
+						<frame x="-8" y="0" width="1024" height="512" duration="160"/>
+						<frame x="-10" y="0" width="1024" height="512" duration="160"/>
+						<frame x="-8" y="0" width="1024" height="512" duration="160"/>
+						<frame x="-5" y="0" width="1024" height="512" duration="160"/>
+						<frame x="0" y="0" width="1024" height="512" duration="160"/>
+						<frame x="5" y="0" width="1024" height="512" duration="160"/>
+						<frame x="8" y="0" width="1024" height="512" duration="160"/>
+					</animation>
+					<animation name="IDLE 2">
+						<frame x="10" y="0" width="1024" height="512" duration="160"/>
+						<frame x="8" y="3" width="1024" height="512" duration="160"/>
+						<frame x="5" y="5" width="1024" height="512" duration="160"/>
+						<frame x="0" y="6" width="1024" height="512" duration="160"/>
+						<frame x="-5" y="5" width="1024" height="512" duration="160"/>
+						<frame x="-8" y="3" width="1024" height="512" duration="160"/>
+						<frame x="-10" y="0" width="1024" height="512" duration="160"/>
+						<frame x="-8" y="-3" width="1024" height="512" duration="160"/>
+						<frame x="-5" y="-5" width="1024" height="512" duration="160"/>
+						<frame x="0" y="-6" width="1024" height="512" duration="160"/>
+						<frame x="5" y="-5" width="1024" height="512" duration="160"/>
+						<frame x="8" y="-3" width="1024" height="512" duration="160"/>
+					</animation>
+				</tiles2d>
+				<light2d parent="1005" color="255 255 255" radius="128" position="16 16"/>
+			</entity>
+		</scene>
+		<scene id="ICE_SCENE">
+			<onLoad>
+				Mechanics.GenerateWorld("Data/FrozenSpire_Map.xml");
+				Logger.Debug("ICE_SCENE.onLoad", "Initializing Player");
+				Mechanics.InitializePlayer("bp_exekiel");
+				/*var pPosition = Mechanics.GetPosition(Player);
+				Mechanics.Create("bp_ice_sheet", pPosition[0] + 0, pPosition[1] + 1);
+				Mechanics.Create("bp_ice_sheet", pPosition[0] - 1, pPosition[1] + 1);
+				Mechanics.Create("bp_ice_sheet", pPosition[0] - 2, pPosition[1] + 1);
+				Mechanics.Create("e_salamander", pPosition[0] + 1, pPosition[1] + 1);*/
+				Mechanics.AddCamera(1000, Player);
+				Mechanics.LookAt(10, Player);
+				Mechanics.ShowGui();
+				Mechanics.Play("DoorClosing16bit.wav", -1);
+				Logger.Debug("ICE_SCENE.onLoad", "Finished");
+			</onLoad>
+			<entity id="1000" descr="container"><layer scale="2 2"/></entity>
+			<entity id="1003" descr="background"><layer blendMode="ALPHA" parent="1000"/></entity>
+			<entity id="1002" descr="floor"><layer blendMode="ALPHA" parent="1000"/></entity>
+			<entity id="1004" descr="grid"><layer blendMode="ADD" parent="1000"/></entity>
+			<entity id="1001" descr="gameobjects"><layer blendMode="ALPHA" parent="1000"/></entity>
+			<entity id="1005" descr="lights"><layer blendMode="MULTIPLY" clearColor="255 255 255 255" parent="1000"/></entity>
+			<entity id="10">
+				<LevelActor Speed="10" threatProgression="1 0 0 0 0 1 0 0 0 0 2 0 0 0 0 3 0 0 0 0 5 0 0 0 0" MaxThreat="20" AlwaysIncreaseThreat="true">
+					<EnemyBlueprints>
+						<EnemyBlueprint TemplateID="bp_firefly" type="MOB" Threat="1" />
+						<EnemyBlueprint TemplateID="e_bronze_thug1" type="STONE_WALL" Threat="3" />
+						<EnemyBlueprint TemplateID="e_salamander" type="LIGHTNING_BRUISER" Threat="8" />
+						<EnemyBlueprint TemplateID="e_thug" type="GLASS_CANNON" Threat="2" />
+					</EnemyBlueprints>
+					<MusicLoops file="wizardduel06FIRELEVEL_good02_2.ogg">
+						<MusicLoop name="intro" start="0" end="16540" MaxThreat="0" />
+						<MusicLoop name="combat1" start="16541" end="33090" MaxThreat="2" />
+						<MusicLoop name="combat2" start="33091" end="41360" MaxThreat="6" />
+						<MusicLoop name="combat3" start="41361" end="49640" MaxThreat="15" />
+					</MusicLoops>
+				</LevelActor>
+				<map width="8" height="8" default="#" map="#########..__..##......##......##......##......##......#########" parent="1004" position="-16 -16">
+				</map>
+				<tiles2d parent="1003" spriteSheet="frozen_spire_floor.png" gridWidth="5" gridHeight="5" onCreate="IDLE">
+					<animation name="IDLE">
+						<frame x="10" y="0" width="1024" height="512" duration="160"/>
+					</animation>
+				</tiles2d>
+				<light2d parent="1005" color="255 255 255" radius="128" position="16 16"/>
+			</entity>
+		</scene>
+		<scene id="LAVA_SCENE">
+			<onLoad>
+				Mechanics.GenerateWorld("Data/FieryPit_Map2.xml");
+				Logger.Debug("START_SCENE.onLoad", "Initializing Player");
+				Mechanics.InitializePlayer("bp_exekiel");
+				var pPosition = Mechanics.GetPosition(Player);
+				//Mechanics.Create("bp_ice_sheet", 2, 3);
+				//Mechanics.Create("e_bronze_thug1", pPosition[0] + 2, pPosition[1] + 0);
+				Mechanics.AddCamera(1000, Player);
+				Mechanics.LookAt(10, Player);
+				Mechanics.ShowGui();
+				Mechanics.Play("DoorClosing16bit.wav", -1);
+				Logger.Debug("START_SCENE.onLoad", "Finished");
+			</onLoad>
+			<entity id="1000" descr="container"><layer scale="2 2"/></entity>
+			<entity id="1003" descr="background"><layer blendMode="ALPHA" parent="1000"/></entity>
+			<entity id="1002" descr="floor"><layer blendMode="ALPHA" parent="1000"/></entity>
+			<entity id="1004" descr="grid"><layer blendMode="ADD" parent="1000"/></entity>
+			<entity id="1001" descr="gameobjects"><layer blendMode="ALPHA" parent="1000"/></entity>
+			<entity id="1005" descr="lights"><layer blendMode="MULTIPLY" clearColor="255 255 255 196" parent="1000"/></entity>
+			<entity id="10">
+				<LevelActor Speed="10" threatProgression="1 0 0 0 0 1 0 0 0 0 2 0 0 0 0 3 0 0 0 0 5 0 0 0 0" MaxThreat="20" AlwaysIncreaseThreat="true">
+					<EnemyBlueprints>
+						<EnemyBlueprint TemplateID="bp_firefly" type="MOB" Threat="1" />
+						<EnemyBlueprint TemplateID="e_bronze_thug1" type="STONE_WALL" Threat="3" />
+						<EnemyBlueprint TemplateID="e_salamander" type="LIGHTNING_BRUISER" Threat="8" />
+						<EnemyBlueprint TemplateID="e_thug" type="GLASS_CANNON" Threat="2" />
+					</EnemyBlueprints>
+					<MusicLoops file="wizardduel06FIRELEVEL_good02_2.ogg">
+						<MusicLoop name="intro" start="0" end="16540" MaxThreat="0" />
+						<MusicLoop name="combat1" start="16541" end="33090" MaxThreat="2" />
+						<MusicLoop name="combat2" start="33091" end="41360" MaxThreat="6" />
+						<MusicLoop name="combat3" start="41361" end="49640" MaxThreat="15" />
+					</MusicLoops>
+				</LevelActor>
+				<map width="8" height="8" default="#" map="#########..__..##......##......##......##......##......#########" parent="1004" position="-16 -16">
+				</map>
+				<tiles2d parent="1003" spriteSheet="FieryPit_Background.png" gridWidth="5" gridHeight="5" onCreate="IDLE">
+					<animation name="IDLE">
+						<frame x="10" y="0" width="1024" height="512" duration="160"/>
+						<frame x="8" y="0" width="1024" height="512" duration="160"/>
+						<frame x="5" y="0" width="1024" height="512" duration="160"/>
+						<frame x="0" y="0" width="1024" height="512" duration="160"/>
+						<frame x="-5" y="0" width="1024" height="512" duration="160"/>
+						<frame x="-8" y="0" width="1024" height="512" duration="160"/>
+						<frame x="-10" y="0" width="1024" height="512" duration="160"/>
+						<frame x="-8" y="0" width="1024" height="512" duration="160"/>
+						<frame x="-5" y="0" width="1024" height="512" duration="160"/>
+						<frame x="0" y="0" width="1024" height="512" duration="160"/>
+						<frame x="5" y="0" width="1024" height="512" duration="160"/>
+						<frame x="8" y="0" width="1024" height="512" duration="160"/>
+					</animation>
+				</tiles2d>
+				<light2d parent="1005" color="255 255 255" radius="128" position="16 16"/>
+			</entity>
+		</scene>
+	</scenes>
+	<import src="Default_Skills.xml"/>
+	<import src="Default_Templates.xml"/>
+	<import src="FieryPit_Templates.xml"/>
+	<import src="FrozenSpire_Templates.xml"/>
+</module>

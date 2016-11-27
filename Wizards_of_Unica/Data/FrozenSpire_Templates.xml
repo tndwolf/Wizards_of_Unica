@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<templates name="Frozen Spire">
+	<template id="e_frozen_carpet_large">
+		<GridObject IsDressing="true">
+		</GridObject>
+		<object2d parent="1001" spriteSheet="00_frozen_spire.png" idleAnimation="IDLE" origin="136 64" z="-10">
+			<animation name="IDLE">
+				<frame x="480" y="160" width="274" height="128" duration="100000"/>
+			</animation>
+		</object2d>
+	</template>
+	<template id="e_frozen_den">
+		<GridObject/>
+		<object2d parent="1001" spriteSheet="00_frozen_spire.png" idleAnimation="IDLE" origin="16 15" shadow="12">
+			<animation name="IDLE">
+				<frame x="480" y="288" width="32" height="32" duration="10000"/>
+			</animation>
+		</object2d>
+	</template>
+	<template id="e_frozen_entrance_large">
+		<GridObject/>
+		<object2d parent="1001" spriteSheet="00_frozen_spire.png" idleAnimation="IDLE" origin="112 108">
+			<animation name="IDLE">
+				<frame x="256" y="0" width="224" height="128" duration="10000"/>
+			</animation>
+		</object2d>
+	</template>
+	<template id="e_frozen_lantern">
+		<GridObject/>
+		<object2d parent="1001" spriteSheet="00_frozen_spire.png" idleAnimation="IDLE" origin="16 24" shadow="12">
+			<animation name="IDLE">
+				<frame x="384" y="160" width="32" height="32" duration="200"/>
+				<frame x="416" y="160" width="32" height="32" duration="200"/>
+				<frame x="448" y="160" width="32" height="32" duration="200"/>
+			</animation>
+		</object2d>
+		<light2d parent="1005" color="255 102 0 127" radius="256" position="16 16" />
+	</template>
+</templates>

@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<skills>
+	<skill id="sk_attack" name="Basic Attack" cooldown="0" priority="1" range="1">
+		Mechanics.SetAnimation(Actor, "ATTACK"); 
+		Mechanics.Damage(Actor, Target, 1, Mechanics.DAMAGE_TYPE_PHYSICAL);
+		return true;
+	</skill>
+	<skill id="sk_rush" name="Bull Rush" cooldown="3" priority="1" range="2">
+		var myPosition = Mechanics.GetPosition(Actor);
+		var targetPosition = Mechanics.GetPosition(Target);
+		var dx = targetPosition[0]-myPosition[0];
+		var dy = targetPosition[1]-myPosition[1];
+		if (dx &gt; 0) dx -= 1;
+		else if (dx &lt; 0) dx += 1;
+		if (dy &gt; 0) dy -= 1;
+		else if (dy &lt; 0) dy += 1;
+		//Logger.Debug("sk_rush", myPosition[0] + "," + myPosition[1]);
+		//Logger.Debug("sk_rush", targetPosition[0] + "," + targetPosition[1]);
+		Logger.Debug("sk_rush", dx + "," + dy);
+		Mechanics.Move(Actor, dx, dy);
+		Mechanics.SetAnimation(Actor, "RUSH"); 
+		Mechanics.Damage(Actor, Target, 1, Mechanics.DAMAGE_TYPE_PHYSICAL);
+		//Mechanics.Push(Target, dx, dy);
+		return true;
+	</skill>
+	<skill id="sk_ice" name="Ice" cooldown="3" priority="1" range="10" show="true" template="portrait_yuki">
+		if (Target == Actor &amp;&amp; Target != INVALID_ENTITY) {
+			Logger.Debug("sk_ice", "Target-self Invalid");
+			return false;
+		} else if (Target != INVALID_ENTITY) {
+			Logger.Debug("sk_ice", "Freezing " + Target);
+			return true;
+		} else {
+			Logger.Debug("sk_ice", "No Target");
+			Mechanics.Create("bp_ice_sheet", TargetX, TargetY);
+			return true;
+		}
+	</skill>
+	<skill id="sk_icycle" name="Icycle" Combo="sk_ice sk_truce" cooldown="3" priority="1" range="10">
+		if (Target == Actor) {
+			Logger.Debug("sk_icycle", "Casting GUARD");
+			return true;
+		} else if (Target != INVALID_ENTITY) {
+			Logger.Debug("sk_icycle", "Casting HURT");
+			return true;
+		} else {
+			Logger.Debug("sk_icycle", "No valid target");
+			return false;
+		}
+	</skill>
+	<skill id="sk_summon" name="Summon" cooldown="3" priority="1" range="10" show="true" template="portrait_bel">
+		if (Target == INVALID_ENTITY) {
+			Logger.Debug("sk_summon", "Casting at " + TargetX + "," + TargetY);
+			Mechanics.Create("e_summon_imp", TargetX, TargetY);
+			return true;
+		} else {
+			Logger.Debug("sk_summon", "Invalid target");
+			return false;
+		}
+	</skill>
+	<skill id="sk_summon_ice" name="Summon Ice" Combo="sk_ice sk_summon" cooldown="3" priority="1" range="10">
+		if (Actor == INVALID_ENTITY &amp;&amp; Target == INVALID_ENTITY) {
+			Logger.Debug("sk_summon_ice", "Casting at " + TargetX + "," + TargetY);
+			return true;
+		} else {
+			Logger.Debug("sk_summon_ice", "Invalid target");
+			return false;
+		}
+	</skill>
+	<skill id="sk_truce" name="Truce" cooldown="1" priority="1" range="10" show="true" template="portrait_truce">
+		var res = false;
+		if (Target == Actor &amp;&amp; Target != INVALID_ENTITY) {
+			Logger.Debug("sk_truce", "Casting GUARD");
+			res = true;
+		} else if (Target != INVALID_ENTITY) {
+			Logger.Debug("sk_truce", "Casting HURT");
+			Mechanics.AddParticle("ps_hurt", TargetX, TargetY);
+			Mechanics.DelayDamage(500, Actor, Target, 5, DAMAGE_TYPE_UNTYPED);
+			res = true;
+		}
+		if (res == true) {
+			Mechanics.SetAnimation(Actor, "CAST");
+		}
+		return res;
+	</skill>
+</skills>
